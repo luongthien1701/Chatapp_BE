@@ -13,8 +13,17 @@ public class GlobalOnlineManager {
         return onlineUsers.get(userId);
     }
     public static void addOnlineUser(long userId, WebSocketSession session) {
+        WebSocketSession oldSession = onlineUsers.get(userId);
+
+        if (oldSession != null && oldSession.isOpen()) {
+            try {
+                oldSession.close();
+            } catch (Exception ignored) {}
+        }
+
         onlineUsers.put(userId, session);
     }
+
     public static void removeOnlineUser(long userId) {
         onlineUsers.remove(userId);
     }
