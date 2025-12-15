@@ -48,4 +48,18 @@ public interface FriendRepository extends JpaRepository<Friend,Long> {
     Friend findRelation(@Param("userId") Long userId, @Param("friendId") Long friendId);
 
     boolean existsByUserIdAndFriendId(Long userId, Long friendId);
+    @Query("""
+    select f.friend.id
+    from Friend f
+    where f.user.id = :userId and f.status = 'ACCEPTED'
+    """)
+    List<Long> findFriendsWhereUserIsSender(@Param("userId") Long userId);
+
+    @Query("""
+    select f.user.id
+    from Friend f
+    where f.friend.id = :userId and f.status = 'ACCEPTED'
+    """)
+    List<Long> findFriendsWhereUserIsReceiver(@Param("userId") Long userId);
+
 }

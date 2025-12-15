@@ -29,5 +29,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "newsfeed_id")
+    @JsonIgnore
+    @ToString.Exclude
     private Newsfeed newsfeed;
 }

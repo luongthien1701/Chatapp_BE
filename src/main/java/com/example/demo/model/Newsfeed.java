@@ -34,8 +34,5 @@ public class Newsfeed {
     @Column(name = "image")
     private String imageUrl;
 
-    private int favorite;
-
-    @OneToMany(mappedBy = "newsfeed")
-    private List<Comment> comments;
+    private Long favorite;
 }
