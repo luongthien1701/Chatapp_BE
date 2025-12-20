@@ -8,6 +8,7 @@ import com.example.demo.model.ChatRoom;
 import com.example.demo.model.Users;
 import com.example.demo.service.ChatRoomService;
 import com.example.demo.service.MessageService;
+import com.example.demo.service.UploadService;
 import com.example.demo.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -26,6 +28,7 @@ public class GlobalController {
     final UserService userService;
     final MessageService messageService;
     final ChatRoomService chatRoomService;
+    final UploadService uploadService;
     @GetMapping("/search/{userId}/{like}")
     public ResponseEntity<?> findAllByLikeDisplayName(@PathVariable Long userId,@PathVariable String like ) {
         List<SelectSearch> sl=new ArrayList<>();
@@ -45,6 +48,11 @@ public class GlobalController {
     }
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestParam("image") MultipartFile img,@RequestParam("type") String type,@RequestParam("ownerId") Long ownerId) throws Exception{
-
+        String url=uploadService.save(img,type,ownerId);
+        if (url!=null) {
+            return ResponseEntity.ok().body(Map.of("url",url));
+        }
+        else
+            return ResponseEntity.badRequest().build();
     }
 }

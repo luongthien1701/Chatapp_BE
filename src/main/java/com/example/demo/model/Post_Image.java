@@ -17,8 +17,10 @@ public class Post_Image {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private Users user;
+    @JoinColumn(name = "newsfeed_id")
+    @JsonIgnore
+    @ToString.Exclude
+    private Newsfeed newsfeed;
 
     @JoinColumn(name = "img_url")
     private String imgUrl;

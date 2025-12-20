@@ -15,7 +15,7 @@ public class PostDTO {
     private Long id;
     private SenderInfo sender;
     private String content;
-    private String image;
+    private List<String> image;
     private Long favorite;
     private Long comments;
     private Timestamp createAt;

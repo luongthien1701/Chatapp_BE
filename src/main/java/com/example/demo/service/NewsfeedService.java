@@ -3,18 +3,18 @@ package com.example.demo.service;
 import com.example.demo.dto.PostDTO;
 import com.example.demo.dto.SenderInfo;
 import com.example.demo.dto.UpdatePost;
+import com.example.demo.model.Post_Image;
 import com.example.demo.model.Post_Like;
 import com.example.demo.model.Newsfeed;
 import com.example.demo.model.Users;
-import com.example.demo.repository.FriendRepository;
-import com.example.demo.repository.LikeRepository;
-import com.example.demo.repository.NewsfeedRepository;
-import com.example.demo.repository.UsersRepository;
+import com.example.demo.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -24,6 +24,7 @@ public class NewsfeedService {
     NewsfeedRepository newsfeedRepository;
     private final UsersRepository usersRepository;
     private final LikeRepository likeRepository;
+    private final ImageRepository imageRepository;
     public List<PostDTO> findAllByUserReceived(Long userId) {
         List<PostDTO> list = new ArrayList<>();
         List<Long> friend1 = friendRepository.findFriendsWhereUserIsSender(userId);
@@ -41,7 +42,7 @@ public class NewsfeedService {
                     postDTO.setSender(new SenderInfo(newsfeed1.getUser().getId(), newsfeed1.getUser().getDisplayName(), newsfeed1.getUser().getAvatarUrl()));
                     postDTO.setContent(newsfeed1.getContent());
                     postDTO.setFavorite(newsfeed1.getFavorite());
-                    postDTO.setImage(newsfeed1.getImageUrl());
+                    postDTO.setImage(imageRepository.findAllByNewsfeedId(newsfeed1.getId()).stream().map(Post_Image::getImgUrl).collect(Collectors.toList()));
                     postDTO.setCreateAt(newsfeed1.getCreateAt());
                     postDTO.setComments(newsfeed1.getComments());
                     postDTO.set_liked(likeRepository.existsByNewsfeedIdAndUserId(newsfeed1.getId(), userId));
@@ -59,8 +60,7 @@ public class NewsfeedService {
         nf.setContent(postDTO.getContent());
         nf.setFavorite(0L);
         nf.setUser(user);
-        nf.setCreateAt(postDTO.getCreateAt());
-        nf.setImageUrl(postDTO.getImage());
+        nf.setCreateAt(new Timestamp(System.currentTimeMillis()));
         nf.setDeleted(false);
         newsfeedRepository.save(nf);
         return nf.getId();

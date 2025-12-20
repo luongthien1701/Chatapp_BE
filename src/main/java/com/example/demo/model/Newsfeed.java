@@ -31,9 +31,6 @@ public class Newsfeed {
     @Column(name = "text")
     private String content;
 
-    @Column(name = "image")
-    private String imageUrl;
-
     private Long favorite;
 
     private Long comments;
