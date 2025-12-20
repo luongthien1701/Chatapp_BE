@@ -17,5 +17,7 @@ public class PostDTO {
     private String content;
     private String image;
     private Long favorite;
+    private Long comments;
     private Timestamp createAt;
+    private boolean is_liked;
 }

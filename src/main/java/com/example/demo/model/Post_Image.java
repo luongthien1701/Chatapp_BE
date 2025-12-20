@@ -9,8 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "comment")
-public class Comment {
+@Table(name = "post_image")
+public class Post_Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,12 +20,6 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private Users user;
 
-    @Column(name = "text")
-    private String content;
-
-    @ManyToOne
-    @JoinColumn(name = "newsfeed_id")
-    @JsonIgnore
-    @ToString.Exclude
-    private Newsfeed newsfeed;
+    @JoinColumn(name = "img_url")
+    private String imgUrl;
 }

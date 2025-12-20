@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,5 +42,9 @@ public class GlobalController {
             sl.add(new SelectSearch("room",null,null,room.getAvatarUrl(),null,room.getId(),room.getName()));
         });
         return ResponseEntity.ok().body(sl);
+    }
+    @PostMapping("/upload")
+    public ResponseEntity<?> uploadFile(@RequestParam("image") MultipartFile img,@RequestParam("type") String type,@RequestParam("ownerId") Long ownerId) throws Exception{
+
     }
 }

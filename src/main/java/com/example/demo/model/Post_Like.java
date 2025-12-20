@@ -9,8 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "comment")
-public class Comment {
+@Table(name = "post_like")
+public class Post_Like {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,9 +19,6 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Users user;
-
-    @Column(name = "text")
-    private String content;
 
     @ManyToOne
     @JoinColumn(name = "newsfeed_id")

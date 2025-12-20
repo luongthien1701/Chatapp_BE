@@ -35,4 +35,9 @@ public class Newsfeed {
     private String imageUrl;
 
     private Long favorite;
+
+    private Long comments;
+
+    @Column(name = "is_deleted")
+    private boolean isDeleted;
 }

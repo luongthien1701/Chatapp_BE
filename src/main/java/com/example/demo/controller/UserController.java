@@ -30,7 +30,7 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
         if (user.getPassword().equals(userLoginRequest.getPassword())){
-            return ResponseEntity.ok().body(user.getId());
+            return ResponseEntity.ok().body(Map.of("id",user.getId(),"name",user.getDisplayName(),"avatarUrl",user.getAvatarUrl()==null?"":user.getAvatarUrl()));
         }
         return ResponseEntity.unprocessableEntity().build();
     }
