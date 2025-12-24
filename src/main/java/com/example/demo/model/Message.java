@@ -41,7 +41,7 @@ public class Message {
     private Message replyTo;
 
     @Enumerated(EnumType.STRING)
-    private MessageType type = MessageType.TEXT;
+    private MessageType type ;
 
     @Enumerated(EnumType.STRING)
     private MessageStatus status = MessageStatus.SENT;
@@ -68,7 +68,6 @@ public class Message {
         status = MessageStatus.SENT;
         reads = new ArrayList<>();
         replyTo = null;
-        fileUrl = null;
     }
     public enum MessageType {
         TEXT, IMAGE, FILE

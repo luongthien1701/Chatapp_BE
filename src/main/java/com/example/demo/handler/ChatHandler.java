@@ -52,6 +52,18 @@ public class ChatHandler extends TextWebSocketHandler {
         Map<String, Object> data = (Map<String, Object>) map.get("data");
 
         switch (event) {
+            case "call_invite":
+
+                break;
+            case "incoming_call":
+                break;
+            case "outgoing_call":
+                break;
+            case "reject_call":
+                break;
+            case "call_accept":
+                break;
+
             case "message":
                 handleChatMessage(session, data);
                 break;

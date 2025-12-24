@@ -25,6 +25,10 @@ public class NewsfeedController {
     public ResponseEntity<?> getNewsfeed(@PathVariable Long userId){
         return ResponseEntity.ok().body(newsfeedService.findAllByUserReceived(userId));
     }
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<?> getProfile(@PathVariable Long userId){
+        return ResponseEntity.ok().body(newsfeedService.findAllPostsByUserId(userId));
+    }
     @PostMapping
     public ResponseEntity<?> saveNewsfeed(@RequestBody PostDTO postDTO){
         long id=newsfeedService.addPost(postDTO);

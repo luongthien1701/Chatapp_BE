@@ -47,4 +47,18 @@ public class UserService {
         }
         else return ("Lỗi,không thể thay đổi mật khẩu");
     }
+    public void changeAvatar(Long user_id,String avatar) {
+        Users user=usersRepository.findUserById(user_id);
+        if (user==null) throw new NullPointerException("Không thể tìm thấy người dùng");
+        user.setAvatarUrl(avatar);
+        usersRepository.save(user);
+    }
+    public void changeProfile(UserProfile userProfile) {
+        Users user=usersRepository.findUserById(userProfile.getId());
+        if (user==null) throw new NullPointerException("Người dùng không tồn tại");
+        user.setDisplayName(userProfile.getDisplayName());
+        user.setEmail(userProfile.getEmail());
+        user.setPhone(userProfile.getPhone());
+        usersRepository.save(user);
+    }
 }

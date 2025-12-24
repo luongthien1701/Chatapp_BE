@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.example.demo.dto.MessageDTO;
 import com.example.demo.dto.MessengerResponse;
 import com.example.demo.model.ChatRoom;
@@ -35,6 +36,7 @@ public class MessageService {
     }
     @Transactional
     public Message save(MessageDTO message) {
+        System.out.println(message);
         Users user=usersRepository.findById(message.getSenderId()).orElse(null);
         ChatRoom chatRoom=chatRoomRepository.findById(message.getChatRoomId()).orElse(null);
         if(chatRoom!=null&&user!=null) {
@@ -44,7 +46,9 @@ public class MessageService {
             messageEntity.setContent(message.getContent());
             if (message.getFileUrl() != null) {
                 messageEntity.setFileUrl(message.getFileUrl());
+                messageEntity.setType(Message.MessageType.IMAGE);
             }
+            else messageEntity.setType(Message.MessageType.TEXT);
             messageRepository.save(messageEntity);
             chatRoom.setLastMessageId(messageEntity.getId());
             chatRoomRepository.save(chatRoom);

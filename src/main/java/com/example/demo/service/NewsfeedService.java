@@ -32,7 +32,6 @@ public class NewsfeedService {
         Set<Long> listFriends=new HashSet<>();
         listFriends.addAll(friend1);
         listFriends.addAll(friend2);
-        System.out.println(newsfeedRepository.findAllByUserId(1L));
         for(Long friendId:listFriends){
             List<Newsfeed> newsfeed=newsfeedRepository.findAllByUserId(friendId);
             for(Newsfeed newsfeed1:newsfeed){
@@ -99,5 +98,24 @@ public class NewsfeedService {
         Newsfeed nf=newsfeedRepository.findById(postId);
         nf.setDeleted(true);
         newsfeedRepository.save(nf);
+    }
+    public List<PostDTO> findAllPostsByUserId(long userId)
+    {
+        List<Newsfeed> newsfeedList=newsfeedRepository.findAllByUserId(userId);
+        List<PostDTO> postDTOList=new ArrayList<>();
+        for(Newsfeed newsfeed:newsfeedList){
+            if (newsfeed.isDeleted()==true) continue;
+            PostDTO postDTO = new PostDTO();
+            postDTO.setId(newsfeed.getId());
+            postDTO.setSender(new SenderInfo(newsfeed.getUser().getId(), newsfeed.getUser().getDisplayName(), newsfeed.getUser().getAvatarUrl()));
+            postDTO.setContent(newsfeed.getContent());
+            postDTO.setFavorite(newsfeed.getFavorite());
+            postDTO.setImage(imageRepository.findAllByNewsfeedId(newsfeed.getId()).stream().map(Post_Image::getImgUrl).collect(Collectors.toList()));
+            postDTO.setCreateAt(newsfeed.getCreateAt());
+            postDTO.setComments(newsfeed.getComments());
+            postDTO.set_liked(likeRepository.existsByNewsfeedIdAndUserId(newsfeed.getId(), userId));
+            postDTOList.add(postDTO);
+        }
+        return postDTOList;
     }
 }

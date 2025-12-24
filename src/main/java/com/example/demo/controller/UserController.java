@@ -75,4 +75,14 @@ public class UserController {
     public String changepassword(@RequestBody ChangePassword changePassword) {
         return userService.changePassword(changePassword.getId(),changePassword.getOldPassword(),changePassword.getNewPassword());
     }
+    @PutMapping("/changeavatar")
+    public ResponseEntity<?> changeAvatar(@RequestBody UpdateAvatar updateAvatar) {
+        userService.changeAvatar((long) updateAvatar.getId(),updateAvatar.getUrl());
+        return  ResponseEntity.ok().body(Map.of("message","success"));
+    }
+    @PutMapping("/changeprofile")
+    public ResponseEntity<?> changeProfile(@RequestBody UserProfile userProfile) {
+        userService.changeProfile(userProfile);
+        return  ResponseEntity.ok().body(Map.of("message","success"));
+    }
 }
