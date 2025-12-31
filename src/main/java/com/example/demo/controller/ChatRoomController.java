@@ -51,5 +51,9 @@ public class ChatRoomController {
     public ResponseEntity<?> findroom(@PathVariable Long userId, @PathVariable Long friendId){
         return ResponseEntity.ok(Map.of("roomId",chatRoomService.findRoom(userId,friendId)));
     }
+    @GetMapping("/users/{conversationId}")
+    public ResponseEntity<?> getAllUserByConversationId(@PathVariable Long conversationId){
+        return ResponseEntity.ok().body(chatRoomService.getMemberInRoom(conversationId));
+    }
 
 }

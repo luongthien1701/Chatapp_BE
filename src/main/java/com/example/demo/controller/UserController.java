@@ -64,7 +64,7 @@ public class UserController {
         }
     }
     @GetMapping("/{userId}")
-    public UserDTO findById(@PathVariable("userId") Long userId) {
+    public SenderInfo findById(@PathVariable("userId") Long userId) {
         return userService.findById(userId);
     }
     @GetMapping("/profile/{userId}")

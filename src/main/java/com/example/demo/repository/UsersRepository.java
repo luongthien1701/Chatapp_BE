@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import com.example.demo.dto.SenderInfo;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.dto.UserProfile;
 import com.example.demo.model.ChatRoom;
@@ -18,10 +19,10 @@ public interface UsersRepository extends JpaRepository<Users,Long> {
     Users findByEmail(String email);
     Users findByDisplayName(String DisplayName);
     @Query(value ="""
-            select u.id,u.display_name
+            select u.id,u.display_name,u.avatar_url
             from Users as u
             where u.id=:userId""",nativeQuery = true)
-    UserDTO findUsersById(@Param("userId") Long id);
+    SenderInfo findUsersById(@Param("userId") Long id);
     @Query(value ="""
             select u.id,u.display_name,u.email,u.password,u.phone
             from Users as u

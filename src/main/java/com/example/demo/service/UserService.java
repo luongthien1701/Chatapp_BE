@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.SenderInfo;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.dto.UserProfile;
 import com.example.demo.model.Users;
@@ -26,7 +27,7 @@ public class UserService {
     public List<Users> findAll() {
         return usersRepository.findAll();
     }
-    public UserDTO findById(Long id) {
+    public SenderInfo findById(Long id) {
         return usersRepository.findUsersById(id);
     }
     public List<Users> findAllByLikeDisplayName(String likeDisplayName) {
