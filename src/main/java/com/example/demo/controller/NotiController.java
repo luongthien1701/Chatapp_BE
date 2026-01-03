@@ -1,12 +1,12 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.TokenNotiRequest;
 import com.example.demo.service.NotiService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/notification")
@@ -17,5 +17,14 @@ public class NotiController {
     @GetMapping("/{userId}")
     public ResponseEntity<?> getNoti(@PathVariable Long userId){
         return ResponseEntity.ok().body(notiService.findAll(userId));
+    }
+    @GetMapping("/token")
+    public ResponseEntity<?> getToken(@RequestParam Long userId){
+        return  ResponseEntity.ok().body(notiService.getToken(userId));
+    }
+    @PostMapping("/token")
+    public ResponseEntity<?> updateToken(@RequestBody TokenNotiRequest tokenNotiRequest){
+        notiService.setToken(tokenNotiRequest.getUserId(), tokenNotiRequest.getToken());
+        return ResponseEntity.ok().body(Map.of("message","success"));
     }
 }

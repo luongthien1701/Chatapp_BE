@@ -29,6 +29,7 @@ public interface UsersRepository extends JpaRepository<Users,Long> {
             where u.id=:userId""",nativeQuery = true)
     UserProfile findUserProfilesById(@Param("userId") Long id);
     List<Users> findByDisplayNameContaining(String displayName);
+    List<Users> findByIdAndProfileVisibilityNot(List<Long> ids, Users.ProfileVisibility profileVisibility);
     @Query(value ="""
             select u.*
             from Users as u

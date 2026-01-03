@@ -8,14 +8,17 @@ import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 
 @Configuration
 public class FirebaseConfig {
     @PostConstruct
     public void init() throws Exception {
-        FileInputStream serviceAccount=new FileInputStream("D:\\Learn\\ServerChatRealTime\\demo (2).zip_expanded\\demo\\src\\main\\resources\\device-streaming-79c92ab1-firebase-adminsdk-jurzs-5ace45646d.json");
+        InputStream serviceAccount =
+                new ClassPathResource("firebase-adminsdk.json").getInputStream();
         FirebaseOptions options=FirebaseOptions.builder().
                 setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .build();

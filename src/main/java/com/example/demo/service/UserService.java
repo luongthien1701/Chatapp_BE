@@ -3,10 +3,13 @@ package com.example.demo.service;
 import com.example.demo.dto.SenderInfo;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.dto.UserProfile;
+import com.example.demo.manager.GlobalOnlineManager;
+import com.example.demo.manager.LocateManager;
 import com.example.demo.model.Users;
 import com.example.demo.repository.UsersRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,11 +30,23 @@ public class UserService {
     public List<Users> findAll() {
         return usersRepository.findAll();
     }
+    public List<Users> getOnlineUsers() {
+        List<Long> onlineUsers = GlobalOnlineManager.getOnlineUserIds();
+        return usersRepository.findByIdAndProfileVisibilityNot(onlineUsers, Users.ProfileVisibility.PUBLIC);
+    }
     public SenderInfo findById(Long id) {
         return usersRepository.findUsersById(id);
     }
     public List<Users> findAllByLikeDisplayName(String likeDisplayName) {
         return usersRepository.findByDisplayNameContaining(likeDisplayName);
+    }
+    public void changeStatus(Long id,double lat,double lon) {
+        Users user=usersRepository.findUserById(id);
+        if (user!=null){
+            user.setProfileVisibility(user.getProfileVisibility()== Users.ProfileVisibility.PUBLIC? Users.ProfileVisibility.PRIVATE: Users.ProfileVisibility.PUBLIC);
+            usersRepository.save(user);
+            LocateManager.addLocate(id,lat,lon);
+        }
     }
     public UserProfile findProfileById(Long id) {
         return usersRepository.findUserProfilesById(id);

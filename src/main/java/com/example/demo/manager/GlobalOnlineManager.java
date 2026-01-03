@@ -3,6 +3,7 @@ package com.example.demo.manager;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -39,6 +40,9 @@ public class GlobalOnlineManager {
                 .map(Map.Entry::getKey)
                 .findFirst()
                 .orElse(null);
+    }
+    public static List<Long> getOnlineUserIds() {
+        return onlineUsers.keySet().stream().toList();
     }
 
 }

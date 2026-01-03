@@ -118,4 +118,8 @@ public class NewsfeedService {
         }
         return postDTOList;
     }
+    public Long getUserId(long postId)
+    {
+        return newsfeedRepository.findById(postId).getUser().getId();
+    }
 }

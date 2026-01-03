@@ -1,0 +1,24 @@
+package com.example.demo.service;
+
+import com.google.firebase.messaging.*;
+import org.springframework.stereotype.Service;
+
+@Service
+public class FCMService {
+    public static String sendMessage(String token,String content) throws FirebaseMessagingException {
+        System.out.println(token);
+        System.out.println(content);
+        Message message = Message
+                .builder()
+                .setToken(token)
+                .setNotification(
+                        Notification.builder()
+                                .setTitle("Thông báo")
+                                .setBody(content)
+                                .build()
+                ).setAndroidConfig(AndroidConfig.builder().setPriority(AndroidConfig.Priority.HIGH).build())
+                .build();
+        return FirebaseMessaging.getInstance().send(message);
+
+    }
+}

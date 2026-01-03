@@ -16,4 +16,5 @@ public class NotificationDTO {
     private Timestamp createdAt;
     private SenderInfo sender;
     private Long receiver;
+    private String type;
 }

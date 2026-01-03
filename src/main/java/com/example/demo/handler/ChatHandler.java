@@ -7,12 +7,10 @@ import com.example.demo.dto.NotificationDTO;
 import com.example.demo.manager.CallManager;
 import com.example.demo.manager.ChatSessionManager;
 import com.example.demo.manager.GlobalOnlineManager;
+import com.example.demo.manager.LocateManager;
 import com.example.demo.model.Message;
 import com.example.demo.model.Notification;
-import com.example.demo.service.ChatMemberService;
-import com.example.demo.service.ChatRoomService;
-import com.example.demo.service.MessageService;
-import com.example.demo.service.NotiService;
+import com.example.demo.service.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -32,7 +30,8 @@ public class ChatHandler extends TextWebSocketHandler {
     private final NotiService notiService;
     private final ChatRoomService chatRoomService;
     private final ChatMemberService chatMemberService;
-
+    private final UserService userService;
+    private final NewsfeedService newsfeedService;
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         try {
@@ -53,6 +52,7 @@ public class ChatHandler extends TextWebSocketHandler {
             if (userId != null) {
                 GlobalOnlineManager.removeOnlineUser(userId);
                 CallManager.removeUserFromAllCalls(userId);
+                LocateManager.removeLocate(userId);
                 System.out.println("✅ [ChatHandler] User disconnected - UserId: " + userId);
             }
         } catch (Exception e) {
@@ -142,7 +142,6 @@ public class ChatHandler extends TextWebSocketHandler {
         ObjectMapper mapper = new ObjectMapper();
         NotificationDTO notification = mapper.convertValue(payload, NotificationDTO.class);
         notiService.save(notification);
-
         if (GlobalOnlineManager.isOnlineUser(notification.getReceiver())) {
             WebSocketSession userSession = GlobalOnlineManager.getSession(notification.getReceiver());
             if (userSession != null && userSession.isOpen()) {
@@ -152,6 +151,35 @@ public class ChatHandler extends TextWebSocketHandler {
 
                 String json = mapper.writeValueAsString(wrapper);
                 userSession.sendMessage(new TextMessage(json));
+            }
+        }
+        else
+        {
+            String type=notification.getType();
+            String name=userService.findById(notification.getSender().getId()).getName();
+            String token;
+            Long userId;
+            switch (type) {
+                case "message":
+                    token=notiService.getToken(notification.getReceiver());
+                    FCMService.sendMessage(token,name+" đã gửi cho bạn một tin nhắn");
+                    break;
+                case "add_friend":
+                    token=notiService.getToken(notification.getReceiver());
+                    FCMService.sendMessage(token,name+" đã gửi gửi lời mời kết bạn");
+                    break;
+                case "like_post":
+                    userId=newsfeedService.getUserId(notification.getReceiver());
+                    token=notiService.getToken(userId);
+                    FCMService.sendMessage(token,name+" đã thích bài viết của bạn");
+                    break;
+                case "comment":
+                    userId=newsfeedService.getUserId(notification.getReceiver());
+                    token=notiService.getToken(userId);
+                    FCMService.sendMessage(token,name+" đã bình luận bài viết của bạn");
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -214,6 +242,7 @@ public class ChatHandler extends TextWebSocketHandler {
             }
         }
     }
+
     protected void handleCallEnd(WebSocketSession session, Map<String, Object> payload) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         Long roomId = ((Number) payload.get("roomId")).longValue();

@@ -21,7 +21,8 @@ public interface NotificationRepository extends JpaRepository<Notification,Long>
             n.senderId.displayName,
             n.senderId.avatarUrl
         ),
-        n.receiverId
+        n.receiverId,
+        ""
     )
     from Notification n
     where n.receiverId = :receiverId
