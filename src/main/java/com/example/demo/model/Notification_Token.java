@@ -1,12 +1,10 @@
 package com.example.demo.model;
 
-import com.example.demo.dto.SenderInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
 @Entity
 @Data
 @AllArgsConstructor

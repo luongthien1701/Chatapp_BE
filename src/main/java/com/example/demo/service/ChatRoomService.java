@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.ChatRoomDTO;
+import com.example.demo.dto.chat.ChatRoomDTO;
 import com.example.demo.model.ChatMember;
 import com.example.demo.model.ChatRoom;
 import com.example.demo.model.Message;
@@ -10,7 +10,6 @@ import com.example.demo.repository.ChatRoomRepository;
 import com.example.demo.repository.MessageRepository;
 import com.example.demo.repository.UsersRepository;
 import lombok.AllArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;

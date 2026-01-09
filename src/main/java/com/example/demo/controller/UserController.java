@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.*;
+import com.example.demo.dto.noti.Locate;
+import com.example.demo.dto.user.*;
+import com.example.demo.manager.LocateManager;
 import com.example.demo.model.Users;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ public class UserController {
     }
     @GetMapping
     public List<Users> findAll() {
+        System.out.println("api đc gọi");
         return userService.findAll();
     }
     @PostMapping("/login")
@@ -64,7 +67,7 @@ public class UserController {
         }
     }
     @GetMapping("/{userId}")
-    public SenderInfo findById(@PathVariable("userId") Long userId) {
+    public UserSummary findById(@PathVariable("userId") Long userId) {
         return userService.findById(userId);
     }
     @GetMapping("/profile/{userId}")
@@ -76,7 +79,7 @@ public class UserController {
         return userService.changePassword(changePassword.getId(),changePassword.getOldPassword(),changePassword.getNewPassword());
     }
     @PutMapping("/changeavatar")
-    public ResponseEntity<?> changeAvatar(@RequestBody UpdateAvatar updateAvatar) {
+    public ResponseEntity<?> changeAvatar(@RequestBody UserAvatarUpdateRequest updateAvatar) {
         userService.changeAvatar((long) updateAvatar.getId(),updateAvatar.getUrl());
         return  ResponseEntity.ok().body(Map.of("message","success"));
     }
@@ -84,5 +87,15 @@ public class UserController {
     public ResponseEntity<?> changeProfile(@RequestBody UserProfile userProfile) {
         userService.changeProfile(userProfile);
         return  ResponseEntity.ok().body(Map.of("message","success"));
+    }
+    @GetMapping("/find")
+    public ResponseEntity<?> findUserNear(@RequestParam Long userId) {
+        return ResponseEntity.ok().body(userService.findUserNear(userId));
+    }
+    @PostMapping("/changestate/{userId}")
+    public ResponseEntity<?> addUserLocate(@PathVariable Long userId,@RequestBody Locate locate)
+    {
+        LocateManager.addLocate(userId,locate.getLat(),locate.getLon());
+        return ResponseEntity.ok().body(Map.of("message","success"));
     }
 }

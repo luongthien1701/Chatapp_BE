@@ -1,6 +1,5 @@
-package com.example.demo.dto;
+package com.example.demo.dto.search;
 
-import com.example.demo.model.Users;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

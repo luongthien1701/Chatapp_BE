@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.CommentDTO;
+import com.example.demo.dto.post.CommentDTO;
 import com.example.demo.service.CommentService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

@@ -1,8 +1,7 @@
 package com.example.demo.service;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
-import com.example.demo.dto.MessageDTO;
-import com.example.demo.dto.MessengerResponse;
+import com.example.demo.dto.chat.MessageDTO;
+import com.example.demo.dto.chat.MessengerResponse;
 import com.example.demo.model.ChatRoom;
 import com.example.demo.model.Message;
 import com.example.demo.model.Users;
@@ -13,6 +12,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class MessageService {
         return messageRepository.findAllByChatRoom_Id(chatRoomId);
     }
     public List<MessengerResponse> findLikeContent(Long userId,String content) {
-        List<Message> list=messageRepository.findMessageInChatroom(userId,content);
+        List<MessageDTO> list=messageRepository.findMessageInChatroom(userId,content);
         List<MessengerResponse> responses=new ArrayList<>();
         list.stream().forEach(mess->{
             responses.add(new MessengerResponse(mess));
@@ -51,6 +51,7 @@ public class MessageService {
             else messageEntity.setType(Message.MessageType.TEXT);
             messageRepository.save(messageEntity);
             chatRoom.setLastMessageId(messageEntity.getId());
+            chatRoom.setCreatedAt(new Timestamp(System.currentTimeMillis()));
             chatRoomRepository.save(chatRoom);
             return messageEntity;
         }

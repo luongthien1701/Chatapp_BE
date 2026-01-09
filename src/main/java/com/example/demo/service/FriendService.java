@@ -2,18 +2,13 @@ package com.example.demo.service;
 
 import com.example.demo.manager.GlobalOnlineManager;
 import com.example.demo.model.Friend;
-import com.example.demo.dto.FriendDTO;
-import com.example.demo.dto.FriendRequest;
+import com.example.demo.dto.friend.FriendResponse;
+import com.example.demo.dto.friend.FriendRequest;
 import com.example.demo.model.Users;
 import com.example.demo.repository.FriendRepository;
 import com.example.demo.repository.UsersRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -26,13 +21,13 @@ public class FriendService {
         this.usersRepository = usersRepository;
     }
 
-    public List<FriendDTO> getAllFriends(Long userId) {
-        List<FriendDTO> sent = friendRepository.findAllByUserSent(userId);
-        List<FriendDTO> received = friendRepository.findAllByUserReceived(userId);
+    public List<FriendResponse> getAllFriends(Long userId) {
+        List<FriendResponse> sent = friendRepository.findAllByUserSent(userId);
+        List<FriendResponse> received = friendRepository.findAllByUserReceived(userId);
 
         // Gộp và lọc trùng
-        Map<Long, FriendDTO> unique = new LinkedHashMap<>();
-        for (FriendDTO f : sent) {
+        Map<Long, FriendResponse> unique = new LinkedHashMap<>();
+        for (FriendResponse f : sent) {
             if (GlobalOnlineManager.isOnlineUser(f.getFriendId())) {
                 f.setStatus("ONLINE");
                 unique.put(f.getFriendId(), f);
@@ -42,7 +37,7 @@ public class FriendService {
                 unique.put(f.getFriendId(), f);
             }
         }
-        for (FriendDTO f : received)
+        for (FriendResponse f : received)
             if (GlobalOnlineManager.isOnlineUser(f.getFriendId())) {
                 f.setStatus("ONLINE");
                 unique.put(f.getFriendId(), f);
@@ -89,15 +84,23 @@ public class FriendService {
 
     public Friend.Status checkFriend(Long userId, Long friendId) {
         Friend fr = friendRepository.findRelation(userId, friendId);
+
         if (fr == null) return Friend.Status.NONE;
-        if (fr.getStatus() == Friend.Status.ACCEPTED) return Friend.Status.ACCEPTED;
+
+        if (fr.getStatus() == Friend.Status.ACCEPTED)
+            return Friend.Status.ACCEPTED;
+
         if (fr.getStatus() == Friend.Status.PENDING) {
             if (fr.getUser().getId().equals(userId)) {
-                return Friend.Status.RECEIVED;
-            } else return Friend.Status.PENDING;
+                return Friend.Status.RECEIVED;   // mình gửi
+            } else {
+                return Friend.Status.PENDING;  // mình nhận
+            }
         }
+
         return fr.getStatus();
     }
+
 
     public void acceptFriend(Long userId, Long friendId) {
         Friend f = friendRepository.findRelation(userId, friendId);

@@ -1,16 +1,18 @@
 package com.example.demo.handler;
 
-import com.example.demo.dto.ChatRoomDTO;
-import com.example.demo.dto.MessageDTO;
-import com.example.demo.dto.MessengerResponse;
-import com.example.demo.dto.NotificationDTO;
+import com.example.demo.dto.chat.ChatRoomDTO;
+import com.example.demo.dto.chat.MessageDTO;
+import com.example.demo.dto.chat.MessengerResponse;
+import com.example.demo.dto.noti.NotificationDTO;
 import com.example.demo.manager.CallManager;
 import com.example.demo.manager.ChatSessionManager;
 import com.example.demo.manager.GlobalOnlineManager;
 import com.example.demo.manager.LocateManager;
 import com.example.demo.model.Message;
-import com.example.demo.model.Notification;
 import com.example.demo.service.*;
+import com.example.demo.worker.DBWorker;
+import com.example.demo.worker.SaveMessageTask;
+import com.example.demo.worker.SaveNotificationTask;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -32,6 +34,7 @@ public class ChatHandler extends TextWebSocketHandler {
     private final ChatMemberService chatMemberService;
     private final UserService userService;
     private final NewsfeedService newsfeedService;
+    private final DBWorker dbWorker;
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         try {
@@ -114,12 +117,8 @@ public class ChatHandler extends TextWebSocketHandler {
     protected void handleChatMessage(WebSocketSession session, Map<String, Object> payload) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         MessageDTO dto = mapper.convertValue(payload, MessageDTO.class);
-        Message mess = messageService.save(dto);
-        MessengerResponse response = new MessengerResponse(mess);
+        MessengerResponse response = new MessengerResponse(dto);
 
-        ChatRoomDTO chatRoomDTO = chatRoomService.findbyConvervationId(response.getGroupId());
-        chatRoomDTO.setLastMessage(response.getContent());
-        chatRoomDTO.setSendTime(new Timestamp(System.currentTimeMillis()));
         Map<String, Object> wrapper = new HashMap<>();
         wrapper.put("event", "message");
         wrapper.put("data", response);
@@ -132,33 +131,32 @@ public class ChatHandler extends TextWebSocketHandler {
             if (userSession != null && userSession.isOpen()) {
                 if (ChatSessionManager.isUserInRoom(userId, dto.getChatRoomId())) {
                     System.out.println(userId);
-                    userSession.sendMessage(new TextMessage(jsonMess));
+                    userSession.sendMessage(new  TextMessage(jsonMess));
                 }
             }
         }
+        dbWorker.submit(new SaveMessageTask(messageService,dto));
     }
 
     protected void handleNotification(WebSocketSession session, Map<String, Object> payload) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         NotificationDTO notification = mapper.convertValue(payload, NotificationDTO.class);
-        notiService.save(notification);
         if (GlobalOnlineManager.isOnlineUser(notification.getReceiver())) {
             WebSocketSession userSession = GlobalOnlineManager.getSession(notification.getReceiver());
             if (userSession != null && userSession.isOpen()) {
                 Map<String, Object> wrapper = new HashMap<>();
                 wrapper.put("event", "notification");
                 wrapper.put("data", notification);
-
                 String json = mapper.writeValueAsString(wrapper);
                 userSession.sendMessage(new TextMessage(json));
             }
         }
         else
         {
-            String type=notification.getType();
             String name=userService.findById(notification.getSender().getId()).getName();
             String token;
             Long userId;
+            String type=notification.getType();
             switch (type) {
                 case "message":
                     token=notiService.getToken(notification.getReceiver());
@@ -166,7 +164,11 @@ public class ChatHandler extends TextWebSocketHandler {
                     break;
                 case "add_friend":
                     token=notiService.getToken(notification.getReceiver());
-                    FCMService.sendMessage(token,name+" đã gửi gửi lời mời kết bạn");
+                    FCMService.sendMessage(token,name+" đã gửi lời mời kết bạn");
+                    break;
+                case "accept_friend":
+                    token=notiService.getToken(notification.getReceiver());
+                    FCMService.sendMessage(token,name+" đã chấp nhận lời mời kết bạn");
                     break;
                 case "like_post":
                     userId=newsfeedService.getUserId(notification.getReceiver());
@@ -182,6 +184,7 @@ public class ChatHandler extends TextWebSocketHandler {
                     break;
             }
         }
+        dbWorker.submit(new SaveNotificationTask(notiService,notification));
     }
 
     protected void handleCallInvite(WebSocketSession session, Map<String, Object> payload) throws Exception {
@@ -262,5 +265,7 @@ public class ChatHandler extends TextWebSocketHandler {
             }
         }
     }
+
+
 }
 

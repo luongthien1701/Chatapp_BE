@@ -1,5 +1,6 @@
-package com.example.demo.dto;
+package com.example.demo.dto.noti;
 
+import com.example.demo.dto.user.UserSummary;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ public class NotificationDTO {
     private String title;
     private boolean status;
     private Timestamp createdAt;
-    private SenderInfo sender;
+    private UserSummary sender;
     private Long receiver;
     private String type;
 }

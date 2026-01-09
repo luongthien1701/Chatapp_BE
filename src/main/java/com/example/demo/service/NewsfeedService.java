@@ -1,8 +1,8 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.PostDTO;
-import com.example.demo.dto.SenderInfo;
-import com.example.demo.dto.UpdatePost;
+import com.example.demo.dto.post.PostDTO;
+import com.example.demo.dto.post.UpdatePost;
+import com.example.demo.dto.user.UserSummary;
 import com.example.demo.model.Post_Image;
 import com.example.demo.model.Post_Like;
 import com.example.demo.model.Newsfeed;
@@ -38,7 +38,7 @@ public class NewsfeedService {
                 if (!newsfeed1.isDeleted()) {
                     PostDTO postDTO = new PostDTO();
                     postDTO.setId(newsfeed1.getId());
-                    postDTO.setSender(new SenderInfo(newsfeed1.getUser().getId(), newsfeed1.getUser().getDisplayName(), newsfeed1.getUser().getAvatarUrl()));
+                    postDTO.setSender(new UserSummary(newsfeed1.getUser().getId(), newsfeed1.getUser().getDisplayName(), newsfeed1.getUser().getAvatarUrl()));
                     postDTO.setContent(newsfeed1.getContent());
                     postDTO.setFavorite(newsfeed1.getFavorite());
                     postDTO.setImage(imageRepository.findAllByNewsfeedId(newsfeed1.getId()).stream().map(Post_Image::getImgUrl).collect(Collectors.toList()));
@@ -107,7 +107,7 @@ public class NewsfeedService {
             if (newsfeed.isDeleted()==true) continue;
             PostDTO postDTO = new PostDTO();
             postDTO.setId(newsfeed.getId());
-            postDTO.setSender(new SenderInfo(newsfeed.getUser().getId(), newsfeed.getUser().getDisplayName(), newsfeed.getUser().getAvatarUrl()));
+            postDTO.setSender(new UserSummary(newsfeed.getUser().getId(), newsfeed.getUser().getDisplayName(), newsfeed.getUser().getAvatarUrl()));
             postDTO.setContent(newsfeed.getContent());
             postDTO.setFavorite(newsfeed.getFavorite());
             postDTO.setImage(imageRepository.findAllByNewsfeedId(newsfeed.getId()).stream().map(Post_Image::getImgUrl).collect(Collectors.toList()));

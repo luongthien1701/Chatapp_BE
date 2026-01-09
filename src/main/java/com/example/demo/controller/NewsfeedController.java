@@ -1,18 +1,14 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.PostDTO;
-import com.example.demo.dto.PostImageRequest;
-import com.example.demo.dto.UpdatePost;
-import com.example.demo.model.Newsfeed;
-import com.example.demo.model.Post_Image;
+import com.example.demo.dto.post.PostDTO;
+import com.example.demo.dto.post.PostImageRequest;
+import com.example.demo.dto.post.UpdatePost;
 import com.example.demo.service.ImageService;
 import com.example.demo.service.NewsfeedService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController

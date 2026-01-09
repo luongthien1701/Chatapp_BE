@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.TokenNotiRequest;
+import com.example.demo.dto.noti.TokenNotiRequest;
 import com.example.demo.service.NotiService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

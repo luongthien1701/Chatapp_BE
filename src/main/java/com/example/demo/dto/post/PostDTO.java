@@ -1,6 +1,6 @@
-package com.example.demo.dto;
+package com.example.demo.dto.post;
 
-import com.example.demo.model.Comment;
+import com.example.demo.dto.user.UserSummary;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class PostDTO {
     private Long id;
-    private SenderInfo sender;
+    private UserSummary sender;
     private String content;
     private List<String> image;
     private Long favorite;

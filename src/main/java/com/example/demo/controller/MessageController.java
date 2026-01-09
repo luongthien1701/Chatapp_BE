@@ -1,19 +1,14 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.MessageDTO;
-import com.example.demo.dto.MessengerResponse;
+import com.example.demo.dto.chat.MessengerResponse;
 import com.example.demo.handler.ChatHandler;
 import com.example.demo.manager.ChatSessionManager;
-import com.example.demo.model.Message;
 import com.example.demo.service.MessageService;
-import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
+
 @RestController
 @RequestMapping("/api/messager")
 public class MessageController {

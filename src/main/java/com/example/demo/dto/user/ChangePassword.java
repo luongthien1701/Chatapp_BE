@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentDTO {
+public class ChangePassword {
     private Long id;
-    private Long postId;
-    private String content;
-    private SenderInfo sender;
+    private String oldPassword;
+    private String newPassword;
 }

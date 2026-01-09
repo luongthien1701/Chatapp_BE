@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AgoraRequest {
-    private String channelName;
-    private int userId;
+public class UserAvatarUpdateRequest
+{
+    private int id;
+    private String url;
 }

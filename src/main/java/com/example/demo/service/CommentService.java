@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.CommentDTO;
-import com.example.demo.dto.SenderInfo;
+import com.example.demo.dto.post.CommentDTO;
+import com.example.demo.dto.user.UserSummary;
 import com.example.demo.model.Comment;
 import com.example.demo.model.Newsfeed;
 import com.example.demo.model.Users;
@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 @Data
 @Service
 @Transactional
@@ -28,7 +26,7 @@ public class CommentService {
         List<CommentDTO> commentDTOS=new ArrayList<>();
         for(Comment comment:comments){
             commentDTOS.add(new CommentDTO(
-               comment.getId(),Newsfeed_Id,comment.getContent(),new SenderInfo(comment.getUser().getId(),comment.getUser().getDisplayName(),comment.getUser().getAvatarUrl())
+               comment.getId(),Newsfeed_Id,comment.getContent(),new UserSummary(comment.getUser().getId(),comment.getUser().getDisplayName(),comment.getUser().getAvatarUrl())
             ));
         }
         return commentDTOS;

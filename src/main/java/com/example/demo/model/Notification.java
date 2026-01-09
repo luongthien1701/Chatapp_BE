@@ -1,6 +1,5 @@
 package com.example.demo.model;
 
-import com.example.demo.dto.SenderInfo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

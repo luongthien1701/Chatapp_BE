@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.dto.friend;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +8,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class FriendDTO {
+public class FriendResponse {
     private Long id;
     private Long friendId;
     private String displayName;

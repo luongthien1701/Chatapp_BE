@@ -1,7 +1,6 @@
 package com.example.demo.repository;
 
-import com.example.demo.dto.ChatRoomDTO;
-import com.example.demo.model.ChatMember;
+import com.example.demo.dto.chat.ChatRoomDTO;
 import com.example.demo.model.ChatRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +10,7 @@ import java.util.List;
 
 public interface ChatRoomRepository extends JpaRepository<ChatRoom,Long> {
     @Query("""
-    select new com.example.demo.dto.ChatRoomDTO(
+    select new com.example.demo.dto.chat.ChatRoomDTO(
     r.id, r.name, r.avatarUrl,
     m.content,
     r.uniquekey,

@@ -1,13 +1,10 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ChatRoomDTO;
-import com.example.demo.dto.RoomRequest;
+import com.example.demo.dto.chat.ChatRoomDTO;
+import com.example.demo.dto.chat.RoomRequest;
 import com.example.demo.manager.ChatSessionManager;
-import com.example.demo.model.ChatRoom;
-import com.example.demo.repository.ChatRoomRepository;
 import com.example.demo.service.ChatRoomService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

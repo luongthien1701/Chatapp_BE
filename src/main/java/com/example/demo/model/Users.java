@@ -45,11 +45,4 @@ public class Users {
 
     @Column(name = "deleted_at")
     private Boolean deletedAt;
-
-    @Column(name = "profileVisibility")
-    private ProfileVisibility profileVisibility;
-
-    public enum ProfileVisibility {
-        PUBLIC, PRIVATE
-    }
 }
